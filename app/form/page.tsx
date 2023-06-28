@@ -61,6 +61,7 @@ export default function Form() {
           modules: [
             {
               tags: [
+                { value: "" }
               ],
               hasPhotos: true,
               photos: [
@@ -170,6 +171,8 @@ export default function Form() {
 
         {
           categoryName: "Drain Condition",
+          canAddModules: true,
+          canDeleteModules: true,
           modules: [
             {
               tags: [
@@ -449,7 +452,7 @@ export default function Form() {
               ],
             },
             {
-              modName: "Bird Building Overview",
+              modName: "Bird Eye Building Overview",
               tags: [
               ],
               hasPhotos: true,

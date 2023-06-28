@@ -108,6 +108,13 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
     </div>
   });
 
+  if (watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags`).length !== 0) {
+    const damageCondition = watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags.0.value`)
+    if (damageCondition == "") {
+      return;
+    }
+  }
+
   return (
     <div className="flex flex-col gap-3">
       <div {...getRootProps({ style })}>

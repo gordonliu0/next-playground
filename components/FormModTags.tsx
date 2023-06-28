@@ -19,7 +19,7 @@ const FormModTags = ({ categoryIndex, moduleIndex, watch, control, register }: A
               <option value="" disabled selected hidden >Select a grading...</option>
               <option value="good">Good</option>
               <option value="fair">Fair</option>
-              <option value="warning">Warning</option>
+              <option value="urgent">Urgent</option>
               <option value="emergency">Emergency</option>
             </select>
           </div>
