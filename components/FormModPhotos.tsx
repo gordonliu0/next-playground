@@ -6,7 +6,8 @@ import { useDropzone, FileWithPath } from 'react-dropzone';
 import Image from 'next/image';
 import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { FormData, ModuleData } from "./FormModule"
-import { AppProps } from '@/components/FormModFields';
+import { AppProps } from '@/components/FormModule';
+import { Trash2 } from "lucide-react";
 
 
 const baseStyle = {
@@ -14,9 +15,8 @@ const baseStyle = {
   'display': 'flex',
   'flexdirection': 'column',
   'alignitems': 'center',
-  'padding': '20px',
-  'border': "dashed 3px rgb(148 163 184)",
-  'borderRadius': '12px',
+  'borderStyle': 'dashed',
+  'borderWidth': '1px',
   'backgroundColor': 'transparent',
   'color': '#bdbdbd',
   'outline': 'none',
@@ -83,29 +83,18 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
     isDragReject
   ]);
 
-  // const onDelete = (i: number) => {
-  //   if (store.formData.cores.length == 1) {
-  //     store.setCores([])
-  //   } else {
-  //     store.setCores([...store.formData.cores].filter((item, index) => index !== i))
-  //   }
-  // }
-
-  // const files = uploadedImages.map((item: string, i: number) => {
-  //   return <div className="flex flex-row gap-2 items-center" key={i}>
-  //     <div className="">
-  //       <AspectRatio.Root ratio={1 / 1} >
-  //         <Image width={20} height={20} src={item} alt="preview" className="rounded-md" key={i} />
-  //       </AspectRatio.Root>
-  //     </div>
-  //     <h1>Photo {i}</h1>
-  //   </div>
-  // });
+  const onDelete = (index: number) => {
+    remove(index)
+    const tempArray = uploadedImages
+    tempArray.splice(index, 1)
+    setUploadedImages(tempArray)
+  }
 
   const files = fields.map((item: ModuleData['photos'][number], i: number) => {
-    return <div key={(item.photo as CustomFile).path}>
+    return <button key={(item.photo as CustomFile).path} className="flex flex-row gap-2 items-center justify-start" onClick={() => onDelete(i)}>
+      <Trash2 size={12} />
       {(item.photo as CustomFile).path}
-    </div>
+    </button>
   });
 
   if (watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags`).length !== 0) {
@@ -116,18 +105,19 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <div {...getRootProps({ style })}>
+    <div className="flex flex-col gap-1">
+      <h1 className="text-sm font-medium">Photo upload</h1>
+      <div {...getRootProps({ style })} className="rounded-2xl flex justify-center items-center p-10">
         <input {...getInputProps()} />
         {
           isDragActive ?
-            <p className="text-center">Drop the files here ...</p> :
-            <p className="text-center">{"Drag 'n' drop some files here, or click to select files"}</p>
+            <p className="text-center text-sm text-muted-foreground">Drop the files here ...</p> :
+            <p className="text-center text-sm text-muted-foreground w-48">{"drag and drop or click to upload photos"}</p>
         }
       </div>
-      <div className="flex flex-col gap-1 px-6 h-fit">
+      {fields.length !== 0 && <div className="flex flex-col gap-1 px-3 h-fit">
         {files}
-      </div>
+      </div>}
     </div>
   );
 }

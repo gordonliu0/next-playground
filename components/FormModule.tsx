@@ -1,14 +1,23 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Control, UseFormRegister, UseFormWatch, useWatch, useFieldArray } from "react-hook-form";
+import { Control, UseFormRegister, UseFormWatch, useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
 import FormModFields from "./FormModFields"
 import FormModPhotos from "./FormModPhotos"
 import FormModTags from "./FormModTags"
+import { PlusCircle, Trash2 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 
 export type FormData = {
   categories: {
     categoryName: string;
+    categoryDescription: string;
     canAddModules: Boolean;
     canDeleteModules: Boolean;
     modules: ModuleData[];
@@ -47,6 +56,7 @@ export declare interface AppProps {
   moduleIndex: number;
   control: Control<FormData, any>; // to pass through style props
   register: UseFormRegister<FormData>;
+  setValue: UseFormSetValue<FormData>;
 }
 
 export declare interface AppPropsExtended extends AppProps {
@@ -54,7 +64,7 @@ export declare interface AppPropsExtended extends AppProps {
   canDeleteModules: Boolean;
 }
 
-export default function FormModule({ canAddModules, canDeleteModules, categoryIndex, moduleIndex, watch, control, register }: AppPropsExtended) {
+export default function FormModule({ canAddModules, canDeleteModules, categoryIndex, moduleIndex, watch, control, register, setValue }: AppPropsExtended) {
   const { fields, remove, append } = useFieldArray({
     control,
     name: `categories.${categoryIndex}.modules`
@@ -66,23 +76,34 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
     return;
   }
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="w-full flex flex-col gap-3">
       {fields.map((item, moduleIndex) => {
-        if (item.hasPhotos == false) {
+        if (item.hasPhotos === false) {
           return (
-            <FormModFields categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModFields" + "category" + categoryIndex + "module" + (moduleIndex)} />
+            <div key={item.id} className="flex flex-col gap-6 p-6 border rounded-2xl">
+              <FormModFields categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} setValue={setValue} key={"formModFields" + "category" + categoryIndex + "module" + (moduleIndex)} />
+            </div>
           )
         }
         return (
-          <div key={item.id} className="flex flex-col gap-3 p-3 border rounded-md border-black">
-            <label>{item.modName ?? "Group " + (moduleIndex + 1)}</label>
-            <FormModTags categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModTags" + "category" + categoryIndex + "module" + moduleIndex} />
-            <FormModPhotos categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModPhotos" + "category" + categoryIndex + "module" + moduleIndex} />
-            <FormModFields categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModFields" + "category" + categoryIndex + "module" + moduleIndex} />
+          <div key={item.id} className="flex flex-col gap-6 p-6 border rounded-2xl">
+            {item.modName && <label>{item.modName}</label>}
+            <FormModTags categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} setValue={setValue} key={"formModTags" + "category" + categoryIndex + "module" + moduleIndex} />
+            <FormModPhotos categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} setValue={setValue} key={"formModPhotos" + "category" + categoryIndex + "module" + moduleIndex} />
+            <FormModFields categoryIndex={categoryIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} setValue={setValue} key={"formModFields" + "category" + categoryIndex + "module" + moduleIndex} />
             {((moduleIndex !== 0) && (canDeleteModules)) &&
-              <button type="button" className={"text-rose-500 py-1 px-2 rounded-full"} onClick={() => remove(moduleIndex)}>
-                Delete Group
-              </button>
+              <div className="flex flex-row items-center justify-end">
+                <button
+                  type="button"
+                  className="flex flex-row gap-2 text-sm text-red-500 stroke-red-500 hover:text-red-700 hover:stroke-red-700 transition"
+                  onClick={() =>
+                    remove(moduleIndex)
+                  }
+                >
+                  <Trash2 size={18} />
+                  Delete this group
+                </button>
+              </div>
             }
           </div>
         );
@@ -91,12 +112,15 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
       {canAddModules &&
         <button
           type="button"
-          className="rounded-lg border border-black px-2 py-1 bg-slate-200"
+          className="px-2 py-1"
           onClick={() =>
             append(defaultValue.current)
           }
         >
-          Add group
+          <div className="flex flex-row gap-2 items-center justify-start text-sm text-muted-foreground hover:text-secondary-foreground transition">
+            <PlusCircle size={18} />
+            Add another group
+          </div>
         </button>
       }
     </div >

@@ -1,16 +1,32 @@
 "use client";
 
+import { redirect } from 'next/navigation';
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import FormModule, { FormData } from "@/components/FormModule"
 import { DevTool } from "@hookform/devtools";
+import { useState, useRef } from "react";
+import { MapPin } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Info } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button"
+import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
+import exportFromJSON from 'export-from-json'
 
 export default function Form() {
   const onSubmit = (data: FormData) => console.log(data);
-  const { register, handleSubmit, watch, formState: { errors }, control, getValues, trigger } = useForm<FormData>({
+  const { register, handleSubmit, watch, formState: { errors }, control, getValues, setValue } = useForm<FormData>({
     defaultValues: {
       categories: [
         {
           categoryName: "Core Inspections",
+          categoryDescription: "Cut through the layers and examine a sample of the roof system",
           canAddModules: true,
           canDeleteModules: true,
           modules: [
@@ -390,23 +406,6 @@ export default function Form() {
         },
 
         {
-          categoryName: "Drone Inspection",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-              ],
-            },
-          ],
-        },
-
-        {
           categoryName: "Drone Building Overview",
           canAddModules: false,
           canDeleteModules: false,
@@ -619,23 +618,6 @@ export default function Form() {
         },
 
         {
-          categoryName: "Property Inspection Results",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-              ],
-            },
-          ],
-        },
-
-        {
           categoryName: "Total Damage Impacts",
           canAddModules: false,
           canDeleteModules: false,
@@ -659,6 +641,7 @@ export default function Form() {
 
         {
           categoryName: "Roof Health Score",
+          categoryDescription: "Please enter a score from 0-100.",
           canAddModules: false,
           canDeleteModules: false,
           modules: [
@@ -671,7 +654,7 @@ export default function Form() {
               modFields: [
                 {
                   modFieldType: "number",
-                  modFieldId: "Please enter a score from 0-100",
+                  modFieldId: 'healthScore',
                   modFieldValue: undefined,
                 },
               ],
@@ -728,48 +711,110 @@ export default function Form() {
     },
   });
 
+  const [step, setStep] = useState(0);
+  const renderCounter = useRef(0);
+  renderCounter.current = renderCounter.current + 1;
+
+  const stepNames = {
+    0: 'Step 1: Input Human Inspection Results',
+    1: 'Step 2: Input Drone Inspection Results',
+    2: 'Step 3: Input Property Inspection Results',
+    3: 'Finish'
+  }
+
+  const stepFieldIndices = [0, 15, 22, 26, 26]
+
+  const totalSteps = 3
+
+  const goBack = () => {
+    setStep(step - 1);
+  };
+
+  const goNext = () => {
+    setStep(step + 1);
+  };
+
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
     name: 'categories',
     control
   })
 
+  const renderHeader = () => {
+    return <div className='flex justify-between items-start gap-4 mt-4 flex-col'>
+      <div className='flex justify-between items-start gap-4'>
+        <span className="flex text-gray-500 text-sm font-semibold">11th May, 2023 at 5:30 pm CST </span>
+        <Badge className="bg-yellow-300 text-gray-900">SCAN IN PROGRESS</Badge>
+      </div>
+      <div className='flex justify-between items-start gap-4 mt-4'>
+        <MapPin size={30} />
+        <span className="flex text-gray-900 text-xl font-bold">123 Miller St, Dallas, TX 75249</span>
+      </div>
+      <span className="flex text-gray-500 text-sm">Upload all images taken of the property and ensure that all images are in either PNG or JPEG format.</span>
+      <div className='flex justify-between items-start gap-4 mt-4 w-full'>
+        <h3 className='w-20 text-sm font-semibold'>Progress</h3>
+        <Progress value={step * 33 + 1} />
+      </div>
+    </div>
+  }
+
+  const renderNavigation = () => {
+    return <div>
+      <div className="flex justify-between items-center">
+        <span className={'flex gap-2 items-center mt-4 mb-4'}>
+          {step != 0
+            ? <ArrowLeftCircle className="h-6 cursor-pointer" onClick={() => goBack()} />
+            : <ArrowLeftCircle className="h-6" color="grey" />}
+          {step != totalSteps
+            ? <ArrowRightCircle className="h-6 cursor-pointer" onClick={() => goNext()} />
+            : <ArrowRightCircle className="h-6" color="grey" />}
+        </span>
+      </div>
+      <h2 className='text-lg font-bold '>{stepNames[step as keyof typeof stepNames]}</h2>
+    </div>
+  }
+
   return (<div className="w-full">
-    <button onClick={() => { console.log(getValues()) }}>
-      Get Values
-    </button>
+    {renderHeader()}
+    {renderNavigation()}
+    <h1>Renders:{renderCounter.current}</h1>
+    <hr className="my-6" />
     <div className="flex flex-col gap-6 w-full">
       {
-        fields.map((category: FormData['categories'][number], categoryIndex: number) => {
+        fields.slice(stepFieldIndices[step], stepFieldIndices[step + 1]).map((category: FormData['categories'][number], categoryIndex: number) => {
           return (
-            <div className="flex flex-col gap-6 rounded-lg border border-black p-6 items-start w-full" key={category.categoryName}>
-              <h1>{category.categoryName}</h1>
-              <FormModule canAddModules={category.canAddModules} canDeleteModules={category.canDeleteModules} watch={watch} categoryIndex={categoryIndex} moduleIndex={0} control={control} register={register} key={"moduleCategory" + categoryIndex} />
-            </div>
+            <Accordion type="single" collapsible key={category.categoryName} className="border rounded-2xl p-6">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <div className="flex flex-col items-start">
+                    <h1 className="text-xl font-medium">{category.categoryName}</h1>
+                    {category.categoryDescription &&
+                      <h2 className="text-sm font-normal text-slate-500 flex flex-row gap-2 items-center">
+                        <Info size={16} />
+                        {category.categoryDescription}
+                      </h2>}
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <FormModule canAddModules={category.canAddModules} canDeleteModules={category.canDeleteModules} watch={watch} categoryIndex={categoryIndex + stepFieldIndices[step]} moduleIndex={0} control={control} register={register} setValue={setValue} key={"moduleCategory" + categoryIndex} />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           )
         })
       }
+      {step === 3 && <div className="flex flex-col gap-2">
+        <Button onClick={() => {
+          console.log(getValues())
+        }}>Submit Form</Button>
+        <Button onClick={() => {
+          console.log(getValues())
+          const fileName = 'download'
+          const exportType = exportFromJSON.types.csv
+          const data = getValues().categories
+          exportFromJSON({ data, fileName, exportType })
+        }}>Download CSV</Button>
+      </div>}
+
     </div>
   </div>)
-
-  // return (<div className="w-full">
-  // <button onClick={() => { console.log(getValues()) }}>
-  //   Get Values
-  // </button>
-  // <div className="flex flex-col gap-6 w-full">
-  //   {
-  //     fields.map((category: FormData['categories'][number], categoryIndex: number) => {
-  //       return (
-  //         <div className="flex flex-col gap-6 rounded-lg border border-black p-6 items-start w-full" key={category.categoryName}>
-  //           <h1>{category.categoryName}</h1>
-  //           {
-  //             category.modules.map((module: FormData['categories'][number]['modules'][number], moduleIndex: number) => {
-  //               return <FormModule canAddModules={category.canAddModules} watch={watch} categoryIndex={categoryIndex} moduleIndex={moduleIndex} control={control} register={register} key={"moduleCategory" + categoryIndex + "module" + moduleIndex} />
-  //             })
-  //           }
-  //         </div>
-  //       )
-  //     })
-  //   }
-  // </div>
-  // </div>)
 }

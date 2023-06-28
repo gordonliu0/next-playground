@@ -1,39 +1,45 @@
 "use client";
 
-import React from "react";
-import { Control, UseFormRegister, useFieldArray, UseFormWatch } from "react-hook-form";
-import { FormData, ModFieldSelect, ModuleData } from "./FormModule"
+import React, { useEffect } from "react";
+import { Control, UseFormRegister, useFieldArray, UseFormWatch, UseFormSetValue } from "react-hook-form";
+import { FormData, ModFieldSelect, ModuleData, AppProps } from "./FormModule"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import * as SelectPrimitive from "@radix-ui/react-select"
 
-export declare interface AppProps {
-  children?: React.ReactNode; // best, accepts everything React can render
-  categoryIndex: number; // A single React element
-  moduleIndex: number; // A single React element
-  watch: UseFormWatch<FormData>;
-  control: Control<FormData, any>; // to pass through style props
-  register: UseFormRegister<FormData>;
-}
-
-export default function FormModFields({ categoryIndex, moduleIndex, watch, control, register }: AppProps) {
+export default function FormModFields({ categoryIndex, moduleIndex, watch, control, register, setValue }: AppProps) {
   const { fields, remove, append, } = useFieldArray({
     control,
     name: `categories.${categoryIndex}.modules.${moduleIndex}.modFields`
   });
 
+  useEffect(() => {
+    watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${0}`)
+  })
+
+  if (watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags`).length !== 0) {
+    const damageCondition = watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags.0.value`)
+    if (damageCondition == "" || damageCondition == "good") {
+      return;
+    }
+  }
+
+
+
   return (
     <div className="flex flex-col gap-3">
       {fields.map((modField, modFieldIndex) => {
-        if (watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags`).length !== 0) {
-          const damageCondition = watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags.0.value`)
-          if (damageCondition == "" || damageCondition == "good") {
-            return;
-          }
-        }
-
         if (modField.modFieldType == "number") {
           return (
-            <div key={modField.id} className="flex flex-col gap-3">
-              <h1>{watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</h1>
-              <input
+            <div key={modField.id} className="flex flex-col gap-1">
+              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <Input
                 {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`, {
                   required: true,
                   valueAsNumber: true,
@@ -46,9 +52,9 @@ export default function FormModFields({ categoryIndex, moduleIndex, watch, contr
         }
         else if (modField.modFieldType == "string") {
           return (
-            <div key={modField.id} className="flex flex-col gap-3">
-              <h1>{watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</h1>
-              <input
+            <div key={modField.id} className="flex flex-col gap-1">
+              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <Input
                 {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`, {
                   required: true,
                 })}
@@ -60,66 +66,34 @@ export default function FormModFields({ categoryIndex, moduleIndex, watch, contr
         }
         else if (modField.modFieldType == "select") {
           return (
-            <div key={modField.id} className="flex flex-col gap-3 bg-transparent">
-              <h1>{watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</h1>
-              <select
-                {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`)}
-                required
-                className="bg-transparent invalid:text-slate-400"
+            <div key={modField.id} className="flex flex-col gap-1 whitespace-pre-line">
+              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <SelectPrimitive.Root
+                defaultValue=""
+                value={watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`) as string}
+                onValueChange={(val) => {
+                  console.log()
+                  setValue(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`, val)
+                }}
               >
-                <option value="" disabled selected hidden >Select an option...</option>
-                {(modField as ModFieldSelect).modFieldSelectOptions.map((option, optionIndex) => {
-                  return (
-                    <option key={optionIndex} value={option} className="bg-transparent">{option}</option>
-                  )
-                })}
-              </select>
+                <SelectTrigger
+                  defaultValue=""
+                >
+                  <SelectValue placeholder="Select an option"></SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="" disabled>Select an option...</SelectItem>
+                  {(modField as ModFieldSelect).modFieldSelectOptions.map((option, optionIndex) => {
+                    return (
+                      <SelectItem key={option} value={option}>{option}</SelectItem>
+                    )
+                  })}
+                </SelectContent>
+              </SelectPrimitive.Root>
             </div>
           );
         }
-
-
       })}
     </div >
   );
-  // return (
-  //   <div className="flex flex-col gap-3">
-  //     {fields.map((modField, modFieldIndex) => {
-  //       return (
-  //         <div key={modField.id} className="flex flex-col gap-3 py-3">
-  //           <div className="flex flex-row gap-3">
-  //             <label>Module Field {modFieldIndex + 1}</label>
-  //             <button disabled={modFieldIndex == 0} type="button" className={(modFieldIndex == 0 ? "bg-gray-300 text-white py-1 px-2 rounded-full focus:outline-none" : "bg-rose-500 hover:bg-rose-700 text-white py-1 px-2 rounded-full")} onClick={() => remove(modFieldIndex)}>
-  //               Delete Field
-  //             </button>
-  //           </div>
-
-  //           <input
-  //             {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}
-  //             defaultValue={"Area Affected"}
-  //           />
-  //           <input
-  //             {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`)}
-  //             defaultValue={"10sqft"}
-  //           />
-
-  //         </div>
-  //       );
-  //     })}
-
-  //     <button
-  //       type="button"
-  //       onClick={() =>
-  //         append({
-  //           modFieldId: "Affected area",
-  //           modFieldValue: "24 sq ft",
-  //         })
-  //       }
-  //     >
-  //       Add field
-  //     </button>
-
-  //     <hr />
-  //   </div >
-  // );
 };
