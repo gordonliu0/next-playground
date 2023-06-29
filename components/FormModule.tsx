@@ -70,7 +70,7 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
     name: `categories.${categoryIndex}.modules`
   });
   const defaultWatch = useWatch({ control: control, name: `categories.${categoryIndex}.modules.${moduleIndex}` })
-  const defaultValue = useRef(defaultWatch)
+  const defaultValue = useRef(JSON.parse(JSON.stringify(defaultWatch)))
 
   if (fields.length == 0) {
     return;
@@ -125,46 +125,4 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
       }
     </div >
   );
-  // return (
-  //   <div className="w-full flex flex-col gap-6">
-  //     {fields.map((item, moduleIndex) => {
-  //       return (
-  //         <div key={item.id} className="flex flex-col gap-3 p-3 border rounded-md border-black">
-  //           <label>Photo Group {moduleIndex + 1}</label>
-  //           <input
-  //             {...register(`categories.${moduleIndex}.modules.${moduleIndex}.tags.0.value`, {
-  //               required: true
-  //             })}
-  //             defaultValue={"Good"}
-  //             style={{ marginRight: "25px" }}
-  //           />
-  //           <FormModFields categoryIndex={moduleIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModuleFields" + moduleIndex} />
-  //           <FormModPhotos categoryIndex={moduleIndex} moduleIndex={moduleIndex} watch={watch} control={control} register={register} key={"formModulePhotosFields" + moduleIndex} />
-  //           <button disabled={moduleIndex == 0} type="button" className={(moduleIndex == 0 ? "bg-gray-300 text-white py-1 px-2 rounded-full focus:outline-none" : "bg-rose-500 hover:bg-rose-700 text-white py-1 px-2 rounded-full")} onClick={() => remove(moduleIndex)}>
-  //             Delete Photo Group
-  //           </button>
-  //         </div>
-  //       );
-  //     })}
-
-  //     <button
-  //       type="button"
-  //       className="rounded-lg border border-black px-2 py-1"
-  //       onClick={() =>
-  //         append({
-  //           tags: [],
-  //           photos: [],
-  //           modFields: [
-  //             {
-  //               modFieldId: "",
-  //               modFieldValue: "",
-  //             },
-  //           ],
-  //         })
-  //       }
-  //     >
-  //       Add photo group
-  //     </button>
-  //   </div >
-  // );
 };

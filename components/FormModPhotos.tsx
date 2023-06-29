@@ -61,6 +61,7 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
       }
       reader.readAsDataURL(file)
     })
+    acceptedFiles = [];
   }, [append, uploadedImages])
 
   const {

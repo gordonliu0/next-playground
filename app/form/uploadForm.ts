@@ -26,7 +26,7 @@ export async function uploadData(data: FormData) {
   allCategories.forEach(async function (cat, catIndex) {
     cat.modules.forEach(async function (mod, modIndex) {
       mod.photos.forEach(async function (photo, photoIndex) {
-        const response = await uploadFile("/" + [formId.toString(), cat.categoryName, (mod.tags.length !== 0 ? mod.tags[0].value : modIndex.toString()), photoIndex].join('/'), photo.photo)
+        const response = await uploadFile("/" + [formId.toString(), cat.categoryName, (mod.tags.length !== 0 ? mod.tags[0].value + modIndex.toString() : modIndex.toString()), photoIndex].join('/'), photo.photo)
       })
     })
   })
