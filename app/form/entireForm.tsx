@@ -857,8 +857,8 @@ export default function Form() {
     {renderHeader()}
     {renderNavigation()}
     <hr className="my-6" />
-    <div className="flex flex-col gap-6 w-full">
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-col gap-6 w-full">
         {
           fields.slice(stepFieldIndices[step], stepFieldIndices[step + 1]).map((category: FormData['categories'][number], categoryIndex: number) => {
             return (
@@ -893,8 +893,8 @@ export default function Form() {
             {done && <span>Done! You are safe to exit the page. </span>}
           </div>
         </div>}
-      </form>
-    </div>
+      </div>
+    </form>
   </div>)
 }
 
