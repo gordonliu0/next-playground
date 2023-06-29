@@ -29,6 +29,7 @@ const FormModTags = ({ categoryIndex, moduleIndex, watch, control, register, set
           <div key={tagField.id} className="flex flex-col gap-1 bg-transparent">
             <h1 className="text-sm font-medium">Grading</h1>
             <SelectPrimitive.Root
+              required
               value={watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags.${tagFieldIndex}.value`)}
               onValueChange={(val) => {
                 setValue(`categories.${categoryIndex}.modules.${moduleIndex}.tags.${tagFieldIndex}.value`, val)

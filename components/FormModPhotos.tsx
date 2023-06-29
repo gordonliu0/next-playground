@@ -41,6 +41,7 @@ interface CustomFile extends File {
 
 const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }: AppProps) => {
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [tempUploadedImages, setTempUploadedImages] = useState<string[]>([]);
 
   const { fields, remove, append } = useFieldArray({
     control,
@@ -48,13 +49,13 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
   });
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    const tempArray = uploadedImages
     acceptedFiles.forEach((file: File) => {
       append({ 'photo': file })
       const reader = new FileReader()
       reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
       reader.onload = () => {
-        const tempArray = uploadedImages
         tempArray.push(reader.result as string)
         setUploadedImages(tempArray)
       }
@@ -91,10 +92,26 @@ const FormModPhotos = ({ categoryIndex, moduleIndex, watch, control, register }:
   }
 
   const files = fields.map((item: ModuleData['photos'][number], i: number) => {
-    return <button key={(item.photo as CustomFile).path} className="flex flex-row gap-2 items-center justify-start" onClick={() => onDelete(i)}>
-      <Trash2 size={12} />
+    return <div className="flex flex-row gap-2 items-center justify-start" key={(item.photo as CustomFile).path}>
+      <div style={{ position: 'relative', width: '100px', height: '100px' }}>
+        <Image
+          className="rounded-2xl"
+          style={{ objectFit: 'cover' }}
+          src={uploadedImages[i]}
+          fill
+          alt="Picture of the author"
+        />
+      </div>
+
+
+
+
+      <button key={(item.photo as CustomFile).path} className="flex flex-row gap-2 items-center justify-start" onClick={() => onDelete(i)}>
+        <Trash2 size={12} />
+      </button>
       {(item.photo as CustomFile).path}
-    </button>
+    </div>
+
   });
 
   if (watch(`categories.${categoryIndex}.modules.${moduleIndex}.tags`).length !== 0) {
