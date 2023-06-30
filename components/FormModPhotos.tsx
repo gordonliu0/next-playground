@@ -8,7 +8,7 @@ import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { FormData, ModuleData } from "./FormModule"
 import { AppProps } from '@/components/FormModule';
 import { Trash2 } from "lucide-react";
-import { useStore } from '@/app/inspection/page'
+import { useStore } from '@/app/inspection/store'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

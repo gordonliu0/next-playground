@@ -6,7 +6,7 @@ import FormModFields from "./FormModFields"
 import FormModPhotos from "./FormModPhotos"
 import FormModTags from "./FormModTags"
 import { PlusCircle, Trash2 } from "lucide-react";
-import { useStore } from '@/app/inspection/page'
+import { useStore } from '@/app/inspection/store'
 
 
 export type FormData = {
