@@ -44,738 +44,740 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import exportFromJSON from 'export-from-json'
 
-export default function Form() {
-  const { register, handleSubmit, watch, formState: { errors }, control, getValues, setValue } = useForm<FormData>({
-    defaultValues: {
-      categories: [
+export const defaultValues = {
+  categories: [
+    {
+      categoryName: "Basic Information",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
         {
-          categoryName: "Basic Information",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Roof Type",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["TPO", "PVC", "EPDM", "Modified Bitumen"],
-                },
-                {
-                  modFieldType: "string",
-                  modFieldId: "Property Address",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "string",
-                  modFieldId: "City",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "string",
-                  modFieldId: "State",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "string",
-                  modFieldId: "Zip Code",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
+          tags: [
           ],
-        },
-
-        {
-          categoryName: "Core Inspections",
-          categoryDescription: "Cut through the layers and examine a sample of the roof system",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "string",
-                  modFieldId: "Roof Composition",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
+          hasPhotos: false,
+          photos: [
           ],
-        },
-
-        {
-          categoryName: "Decking Condition",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
+          modFields: [
             {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Seam Condition",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Linear Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Membrane Attachment",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Impacts or Tears",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Pitch Pans",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Quantity Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Curb Condition",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Linear Feet Needing Repair",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Drain Condition",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Drain Repair Options",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Reflash Drain", "Retrofit Drain"],
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Retrofit Diameter Entry (if applicable)",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Scuppers",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Scupper Repair Options",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Reflash Scupper", "Replace Scupper"],
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Width",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Height",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Depth",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Coping",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Linear Feet",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Coping Inner Leg Measurement",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Coping Top Leg Measurement",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Coping Outer Leg Measurement",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Membrane Perimeter",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Linear Feet Needing Repair",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Wall Flashings",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Other Considerations",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "string",
-                  modFieldId: "Notes",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Property Type",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Selection",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Office", "Retail", "Hotel", "Industrial", "Multifamily"],
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Code Compliance Checklist Reviewed",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Selection",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Yes", "No"],
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Drone Building Overview",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              modName: "Front Building Overview",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
+              modFieldType: "select",
+              modFieldId: "Roof Type",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["TPO", "PVC", "EPDM", "Modified Bitumen"],
             },
             {
-              modName: "Back Building Overview",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
+              modFieldType: "string",
+              modFieldId: "Property Address",
+              modFieldValue: undefined,
             },
             {
-              modName: "Left Building Overview",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
+              modFieldType: "string",
+              modFieldId: "City",
+              modFieldValue: undefined,
             },
             {
-              modName: "Right Building Overview",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
+              modFieldType: "string",
+              modFieldId: "State",
+              modFieldValue: undefined,
             },
             {
-              modName: "Bird Eye Building Overview",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Previous Repairs",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "string",
-                  modFieldId: "Previous Repairs Recommendations",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Rooftop Mechanical",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "string",
-                  modFieldId: "Rooftop Mechanical Recommendations",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Gutters Conditions",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Linear Feet Affected",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Width",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Length",
-                  modFieldValue: undefined,
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Height",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Areas of Ponding",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" }
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Roof Membrane Condition",
-          canAddModules: true,
-          canDeleteModules: true,
-          modules: [
-            {
-              tags: [
-                { value: "" },
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Storm Damage",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Hail Damaged", "Wind Damaged", "None"],
-                },
-                {
-                  modFieldType: "number",
-                  modFieldId: "Square Feet Affected",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "10x10 Test Square",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              modName: "If roof membrane is damaged, please provide photos for a 10x10 test square here.",
-              tags: [
-              ],
-              hasPhotos: true,
-              photos: [
-              ],
-              modFields: [
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Total Damage Impacts",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: "Dollars",
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Roof Health Score",
-          categoryDescription: "Please enter a score from 0-100.",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "number",
-                  modFieldId: 'healthScore',
-                  modFieldValue: undefined,
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Recommended Property Action",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Selection",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Healthy", "Vulnerable", "Roof Repair Needed", "Roof Replacement Needed"],
-                },
-              ],
-            },
-          ],
-        },
-
-        {
-          categoryName: "Insurance Claim Eligible",
-          canAddModules: false,
-          canDeleteModules: false,
-          modules: [
-            {
-              tags: [
-              ],
-              hasPhotos: false,
-              photos: [
-              ],
-              modFields: [
-                {
-                  modFieldType: "select",
-                  modFieldId: "Selection",
-                  modFieldValue: undefined,
-                  modFieldSelectOptions: ["Eligible", "Ineligible"],
-                },
-              ],
+              modFieldType: "string",
+              modFieldId: "Zip Code",
+              modFieldValue: undefined,
             },
           ],
         },
       ],
     },
+
+    {
+      categoryName: "Core Inspections",
+      categoryDescription: "Cut through the layers and examine a sample of the roof system",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "string",
+              modFieldId: "Roof Composition",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Decking Condition",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Seam Condition",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Linear Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Membrane Attachment",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Impacts or Tears",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Pitch Pans",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Quantity Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Curb Condition",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Linear Feet Needing Repair",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Drain Condition",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Drain Repair Options",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Reflash Drain", "Retrofit Drain"],
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Retrofit Diameter Entry (if applicable)",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Scuppers",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Scupper Repair Options",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Reflash Scupper", "Replace Scupper"],
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Width",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Height",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Depth",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Coping",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Linear Feet",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Coping Inner Leg Measurement",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Coping Top Leg Measurement",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Coping Outer Leg Measurement",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Membrane Perimeter",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Linear Feet Needing Repair",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Wall Flashings",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Other Considerations",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "string",
+              modFieldId: "Notes",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Property Type",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Selection",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Office", "Retail", "Hotel", "Industrial", "Multifamily"],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Code Compliance Checklist Reviewed",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Selection",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Yes", "No"],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Drone Building Overview",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          modName: "Front Building Overview",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+        {
+          modName: "Back Building Overview",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+        {
+          modName: "Left Building Overview",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+        {
+          modName: "Right Building Overview",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+        {
+          modName: "Bird Eye Building Overview",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Previous Repairs",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "string",
+              modFieldId: "Previous Repairs Recommendations",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Rooftop Mechanical",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "string",
+              modFieldId: "Rooftop Mechanical Recommendations",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Gutters Conditions",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Linear Feet Affected",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Width",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Length",
+              modFieldValue: undefined,
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Height",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Areas of Ponding",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" }
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Roof Membrane Condition",
+      canAddModules: true,
+      canDeleteModules: true,
+      modules: [
+        {
+          tags: [
+            { value: "" },
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Storm Damage",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Hail Damaged", "Wind Damaged", "None"],
+            },
+            {
+              modFieldType: "number",
+              modFieldId: "Square Feet Affected",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "10x10 Test Square",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          modName: "If roof membrane is damaged, please provide photos for a 10x10 test square here.",
+          tags: [
+          ],
+          hasPhotos: true,
+          photos: [
+          ],
+          modFields: [
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Total Damage Impacts",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: "Impact Count",
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Roof Health Score",
+      categoryDescription: "Please enter a score from 0-100.",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "number",
+              modFieldId: 'healthScore',
+              modFieldValue: undefined,
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Recommended Property Action",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Selection",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Healthy", "Vulnerable", "Roof Repair Needed", "Roof Replacement Needed"],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      categoryName: "Insurance Claim Eligible",
+      canAddModules: false,
+      canDeleteModules: false,
+      modules: [
+        {
+          tags: [
+          ],
+          hasPhotos: false,
+          photos: [
+          ],
+          modFields: [
+            {
+              modFieldType: "select",
+              modFieldId: "Selection",
+              modFieldValue: undefined,
+              modFieldSelectOptions: ["Eligible", "Ineligible"],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+}
+
+export default function Form() {
+  const { register, handleSubmit, watch, formState: { errors }, control, getValues, setValue } = useForm<FormData>({
+    defaultValues: defaultValues,
   });
 
   const [step, setStep] = useState(0);

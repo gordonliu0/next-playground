@@ -1,17 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Control, UseFormRegister, UseFormWatch, useWatch, useFieldArray, UseFormSetValue } from "react-hook-form";
 import FormModFields from "./FormModFields"
 import FormModPhotos from "./FormModPhotos"
 import FormModTags from "./FormModTags"
 import { PlusCircle, Trash2 } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { useStore } from '@/app/inspection/page'
 
 
 export type FormData = {
@@ -65,6 +60,9 @@ export declare interface AppPropsExtended extends AppProps {
 }
 
 export default function FormModule({ canAddModules, canDeleteModules, categoryIndex, moduleIndex, watch, control, register, setValue }: AppPropsExtended) {
+  const categories = useStore((state: any) => state.categories)
+  const addModule = useStore((state: any) => state.addModule)
+  const removeModule = useStore((state: any) => state.removeModule)
   const { fields, remove, append } = useFieldArray({
     control,
     name: `categories.${categoryIndex}.modules`
@@ -96,9 +94,10 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
                 <button
                   type="button"
                   className="flex flex-row gap-2 text-sm text-red-500 stroke-red-500 hover:text-red-700 hover:stroke-red-700 transition"
-                  onClick={() =>
+                  onClick={() => {
                     remove(moduleIndex)
-                  }
+                    removeModule({ categoryIndex, moduleIndex })
+                  }}
                 >
                   <Trash2 size={18} />
                   Delete this group
@@ -113,9 +112,10 @@ export default function FormModule({ canAddModules, canDeleteModules, categoryIn
         <button
           type="button"
           className="px-2 py-1"
-          onClick={() =>
+          onClick={() => {
             append(defaultValue.current)
-          }
+            addModule({ categoryIndex })
+          }}
         >
           <div className="flex flex-row gap-2 items-center justify-start text-sm text-muted-foreground hover:text-secondary-foreground transition">
             <PlusCircle size={18} />

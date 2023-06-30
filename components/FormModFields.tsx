@@ -38,7 +38,7 @@ export default function FormModFields({ categoryIndex, moduleIndex, watch, contr
         if (modField.modFieldType == "number") {
           return (
             <div key={modField.id} className="flex flex-col gap-1">
-              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <p className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? 'The roof health score on the left correlates to the estimated roof lifespan remaining on the right \n 91-100 → 10+ years \n 81-90 → 5-10 years \n 71-80 → 2-5 years \n 61-70 → 6-24 months \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</p>
               <Input
                 {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`, {
                   required: true,
@@ -53,7 +53,7 @@ export default function FormModFields({ categoryIndex, moduleIndex, watch, contr
         else if (modField.modFieldType == "string") {
           return (
             <div key={modField.id} className="flex flex-col gap-1">
-              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <p className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? 'The roof health score on the left correlates to the estimated roof lifespan remaining on the right \n 91-100 → 10+ years \n 81-90 → 5-10 years \n 71-80 → 2-5 years \n 61-70 → 6-24 months \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</p>
               <Input
                 {...register(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`, {
                   required: true,
@@ -67,7 +67,7 @@ export default function FormModFields({ categoryIndex, moduleIndex, watch, contr
         else if (modField.modFieldType == "select") {
           return (
             <div key={modField.id} className="flex flex-col gap-1 whitespace-pre-line">
-              <text className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? '90-100 → 10+ Years... \n 80-90 → 5-10 years... \n 70-80 → 2-5 years... \n 60-70 → 6-24 months... \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</text>
+              <p className="text-sm font-medium whitespace-pre-line">{(watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`).toString() == 'healthScore') ? 'The roof health score on the left correlates to the estimated roof lifespan remaining on the right \n 91-100 → 10+ years \n 81-90 → 5-10 years \n 71-80 → 2-5 years \n 61-70 → 6-24 months \n < 60 → < 6 months' : watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldId`)}</p>
               <SelectPrimitive.Root
                 defaultValue=""
                 value={watch(`categories.${categoryIndex}.modules.${moduleIndex}.modFields.${modFieldIndex}.modFieldValue`) as string}
