@@ -44,7 +44,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import exportFromJSON from 'export-from-json'
 
-export const defaultValues = {
+const defaultValues = {
   categories: [
     {
       categoryName: "Basic Information",

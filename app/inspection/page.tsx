@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import React, { useEffect } from 'react'
 import { create } from 'zustand'
 
-export const defaultValues = {
+const defaultValues = {
   categories: [
     {
       categoryName: "Basic Information",
